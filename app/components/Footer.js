@@ -1,13 +1,14 @@
 import React from 'react'
 
+import {debounce} from '../utils'
+
 import languages from 'json!../languages.json'
 
 export default ({onLangChange, onReset, lang, selectedFiles}) => (
   <footer className='app-footer'>
     <select
-      onChange={onLangChange}
+      onChange={debounce(onLangChange, 500)}
       value={lang}
-      disabled={selectedFiles.length}
     >
       { languages.map(lang =>
           <option

@@ -25,3 +25,15 @@ export function getDefaultLang () {
 export function setDefaultLang (lang) {
   window.localStorage.setItem('lang', lang)
 }
+
+export function debounce(fn, delay) {
+  let timer = null;
+
+  return function () {
+    const context = this
+    const args = arguments
+
+    clearTimeout(timer)
+    timer = setTimeout(() => { fn.apply(context, args) }, delay)
+  }
+}
