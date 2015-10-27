@@ -8,6 +8,14 @@
     "name": "Bulgarian"
   },
   {
+    "id": "zht",
+    "name": "Chinese (traditional)"
+  },
+  {
+    "id": "hrv",
+    "name": "Croatian"
+  },
+  {
     "id": "cze",
     "name": "Czech"
   },
@@ -40,16 +48,16 @@
     "name": "French"
   },
   {
+    "id": "glg",
+    "name": "Galician"
+  },
+  {
     "id": "geo",
     "name": "Georgian"
   },
   {
     "id": "ger",
     "name": "German"
-  },
-  {
-    "id": "glg",
-    "name": "Galician"
   },
   {
     "id": "ell",
@@ -62,10 +70,6 @@
   {
     "id": "hin",
     "name": "Hindi"
-  },
-  {
-    "id": "hrv",
-    "name": "Croatian"
   },
   {
     "id": "hun",
@@ -110,7 +114,8 @@
   {
     "id": "oci",
     "name": "Occitan"
-  },{
+  },
+  {
     "id": "per",
     "name": "Persian"
   },
@@ -119,13 +124,22 @@
     "name": "Polish"
   },
   {
+    "id": "pob",
+    "name": "Portuguese (BR)"
+  },
+  {
+    "id": "rum",
+    "name": "Romanian"
+  },
+  {
     "id": "rus",
     "name": "Russian"
   },
   {
     "id": "scc",
     "name": "Serbian"
-  },{
+  },
+  {
     "id": "sin",
     "name": "Sinhalese"
   },
@@ -160,17 +174,5 @@
   {
     "id": "vie",
     "name": "Vietnamese"
-  },
-  {
-    "id": "rum",
-    "name": "Romanian"
-  },
-  {
-    "id": "pob",
-    "name": "Portuguese (BR)"
-  },
-  {
-    "id": "zht",
-    "name": "Chinese (traditional)"
   }
 ]
