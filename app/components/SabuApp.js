@@ -61,18 +61,7 @@ class SabuApp extends React.Component {
 
   @autobind
   handleLangChange(e) {
-    const newLang = e.target.value;
-
-    if (newLang === this.props.lang) { return }
-
-    this.props.setLang(newLang)
-
-    // restart the search with new language
-    if (this.props.selectedFiles.length) {
-      const paths = this.props.selectedFiles.map(file => file.path)
-      this.props.reset()
-      paths.forEach(this.props.requestSubtitles)
-    }
+    this.props.setLang(e.target.value)
   }
 
   @autobind
