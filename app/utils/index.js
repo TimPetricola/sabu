@@ -17,3 +17,11 @@ export function autobind(target, key, { value: fn }) {
     }
   }
 }
+
+export function getDefaultLang () {
+  return window.localStorage.getItem('lang') || 'eng'
+}
+
+export function setDefaultLang (lang) {
+  window.localStorage.setItem('lang', lang)
+}

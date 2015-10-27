@@ -1,9 +1,11 @@
 import * as ActionTypes from '../actions/index'
 
+import {getDefaultLang} from '../utils'
+
 const initialState = {
   selectedFiles: [],
   apiToken: null,
-  lang: 'eng',
+  lang: getDefaultLang(),
   requesting: false,
   online: true
 }

@@ -1,4 +1,5 @@
 import api from '../api'
+import {setDefaultLang} from '../utils'
 
 const remote = window.remote
 const http = remote.require('http')
@@ -107,6 +108,8 @@ export function downloadSubtitle (filepath, subId) {
 }
 
 export function setLang (lang) {
+  setDefaultLang(lang)
+
   return {
     type: LANG_CHANGED,
     lang: lang
