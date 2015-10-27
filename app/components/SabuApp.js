@@ -23,14 +23,28 @@ class SabuApp extends React.Component {
     window.addEventListener('offline', this.checkConnection)
     this.checkConnection()
 
+    document.addEventListener('keyup', this.onKeyup)
+
     this.props.apiLogin()
   }
 
   componentWillUmount() {
     this.props.apiLogout()
 
+    document.removeEventListener('keyup', this.onKeyup)
+
     window.removeEventListener('online', this.checkConnection)
     window.removeEventListener('offline', this.checkConnection)
+  }
+
+  @autobind
+  onKeyup(e) {
+    const charCode = (typeof e.which === 'number') ? e.which : e.keyCode
+    const char = String.fromCharCode(e.which).toLowerCase()
+
+    if (char === 'n') {
+      this.props.reset()
+    }
   }
 
   @autobind
