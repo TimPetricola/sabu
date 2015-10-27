@@ -5,6 +5,8 @@ import Dropzone from './Dropzone'
 import SpinnerScreen from './SpinnerScreen'
 import SubsResults from './SubsResults'
 
+import {autobind} from '../utils'
+
 const FILE_FILTERS = [
   { name: 'Movies', extensions: ['mkv', 'avi', 'mp4', 'm4v']}
 ]
@@ -35,10 +37,12 @@ const DropArea = ({onDrop}) => (
 )
 
 export default class Content extends React.Component {
+  @autobind
   handleDrop(paths) {
     [paths[0]].forEach(this.props.requestSubtitles)
   }
 
+  @autobind
   handleDownload(subId) {
     this.props.downloadSubtitle(this.props.selectedFiles[0].path, subId)
   }
@@ -52,9 +56,9 @@ export default class Content extends React.Component {
           ? selectedFile.requesting
             ? <SubsLoading />
             : selectedFile.subtitles.length
-              ? <SubsResults subs={selectedFile.subtitles} onDownload={this.handleDownload.bind(this)} />
+              ? <SubsResults subs={selectedFile.subtitles} onDownload={this.handleDownload} />
               : <SubsNotFound />
-          : <DropArea onDrop={this.handleDrop.bind(this)} />
+          : <DropArea onDrop={this.handleDrop} />
         }
       </div>
     )

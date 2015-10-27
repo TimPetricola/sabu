@@ -3,6 +3,8 @@
 
 import React, {PropTypes} from 'react'
 
+import {autobind} from '../utils'
+
 const dialog = window.remote.require('dialog')
 
 function pathsFromDragEvent(e) {
@@ -42,14 +44,16 @@ export default class Dropzone extends React.Component {
     )
   }
 
+  @autobind
   isPathAccepted(path) {
     return this.extensions.indexOf(path.split('.').pop()) !== -1
   }
 
   arePathsAccepted(paths) {
-    return paths.every(this.isPathAccepted.bind(this))
+    return paths.every(this.isPathAccepted)
   }
 
+  @autobind
   onDragEnter(e) {
     e.preventDefault();
 
@@ -63,10 +67,12 @@ export default class Dropzone extends React.Component {
     })
   }
 
+  @autobind
   onDragOver(e) {
     e.preventDefault()
   }
 
+  @autobind
   onDragLeave(e) {
     e.preventDefault();
 
@@ -76,6 +82,7 @@ export default class Dropzone extends React.Component {
     this.setState({isDragActive: false})
   }
 
+  @autobind
   onDrop(e) {
     e.preventDefault();
 
@@ -91,6 +98,7 @@ export default class Dropzone extends React.Component {
     }
   }
 
+  @autobind
   open() {
     const params = {
       properties: ['openFile'],
@@ -124,11 +132,11 @@ export default class Dropzone extends React.Component {
     return (
       <div
         className={classNames.join(' ')}
-        onClick={this.open.bind(this)}
-        onDragEnter={this.onDragEnter.bind(this)}
-        onDragOver={this.onDragOver.bind(this)}
-        onDragLeave={this.onDragLeave.bind(this)}
-        onDrop={this.onDrop.bind(this)}
+        onClick={this.open}
+        onDragEnter={this.onDragEnter}
+        onDragOver={this.onDragOver}
+        onDragLeave={this.onDragLeave}
+        onDrop={this.onDrop}
       >
         {this.props.children}
       </div>

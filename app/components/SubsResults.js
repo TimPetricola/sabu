@@ -1,8 +1,11 @@
 import React from 'react'
 
+import {autobind} from '../utils'
+
 import Icon from './Icon'
 
 class SubLine extends React.Component {
+  @autobind
   handleDownload() {
     this.props.onDownload(this.props.sub.IDSubtitleFile);
   }
@@ -22,7 +25,7 @@ class SubLine extends React.Component {
             ? <span>Done</span>
             : sub.downloading
               ? <span>...</span>
-              : <a onClick={this.handleDownload.bind(this)}>
+              : <a onClick={this.handleDownload}>
                   <Icon
                     icon='download'
                     className='download-icon'
