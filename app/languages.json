@@ -1,0 +1,176 @@
+[
+  {
+    "id": "ara",
+    "name": "Arabic"
+  },
+  {
+    "id": "bul",
+    "name": "Bulgarian"
+  },
+  {
+    "id": "cze",
+    "name": "Czech"
+  },
+  {
+    "id": "dan",
+    "name": "Danish"
+  },
+  {
+    "id": "dut",
+    "name": "Dutch"
+  },
+  {
+    "id": "eng",
+    "name": "English"
+  },
+  {
+    "id": "epo",
+    "name": "Esperanto"
+  },
+  {
+    "id": "est",
+    "name": "Estonian"
+  },
+  {
+    "id": "fin",
+    "name": "Finnish"
+  },
+  {
+    "id": "fre",
+    "name": "French"
+  },
+  {
+    "id": "geo",
+    "name": "Georgian"
+  },
+  {
+    "id": "ger",
+    "name": "German"
+  },
+  {
+    "id": "glg",
+    "name": "Galician"
+  },
+  {
+    "id": "ell",
+    "name": "Greek"
+  },
+  {
+    "id": "heb",
+    "name": "Hebrew"
+  },
+  {
+    "id": "hin",
+    "name": "Hindi"
+  },
+  {
+    "id": "hrv",
+    "name": "Croatian"
+  },
+  {
+    "id": "hun",
+    "name": "Hungarian"
+  },
+  {
+    "id": "ice",
+    "name": "Icelandic"
+  },
+  {
+    "id": "ind",
+    "name": "Indonesian"
+  },
+  {
+    "id": "ita",
+    "name": "Italian"
+  },
+  {
+    "id": "jpn",
+    "name": "Japanese"
+  },
+  {
+    "id": "khm",
+    "name": "Khmer"
+  },
+  {
+    "id": "kor",
+    "name": "Korean"
+  },
+  {
+    "id": "mac",
+    "name": "Macedonian"
+  },
+  {
+    "id": "may",
+    "name": "Malay"
+  },
+  {
+    "id": "nor",
+    "name": "Norwegian"
+  },
+  {
+    "id": "oci",
+    "name": "Occitan"
+  },{
+    "id": "per",
+    "name": "Persian"
+  },
+  {
+    "id": "pol",
+    "name": "Polish"
+  },
+  {
+    "id": "rus",
+    "name": "Russian"
+  },
+  {
+    "id": "scc",
+    "name": "Serbian"
+  },{
+    "id": "sin",
+    "name": "Sinhalese"
+  },
+  {
+    "id": "slo",
+    "name": "Slovak"
+  },
+  {
+    "id": "slv",
+    "name": "Slovenian"
+  },
+  {
+    "id": "spa",
+    "name": "Spanish"
+  },
+  {
+    "id": "swe",
+    "name": "Swedish"
+  },
+  {
+    "id": "tgl",
+    "name": "Tagalog"
+  },
+  {
+    "id": "tha",
+    "name": "Thai"
+  },
+  {
+    "id": "ukr",
+    "name": "Ukrainian"
+  },
+  {
+    "id": "vie",
+    "name": "Vietnamese"
+  },
+  {
+    "id": "rum",
+    "name": "Romanian"
+  },
+  {
+    "id": "pob",
+    "name": "Portuguese (BR)"
+  },
+  {
+    "id": "zht",
+    "name": "Chinese (traditional)"
+  }
+]
