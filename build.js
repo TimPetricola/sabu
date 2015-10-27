@@ -13,7 +13,7 @@ webpack(webpackConfig).run(function() {
 
   packager({
     dir: '.',
-    name: 'Sabu',
+    name: packageJson.productName,
     icon: 'sabu.icns',
     platform: 'darwin',
     arch: 'x64',
