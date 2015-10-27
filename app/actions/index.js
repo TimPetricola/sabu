@@ -49,9 +49,16 @@ export function requestSubtitles (filepath) {
     dispatch({type: SUBTITLES_REQUEST, filepath})
 
     const {lang, apiToken} = getState()
+    const filename = path.basename(filepath)
 
     api.searchFile(apiToken, lang, filepath).then((subtitles) => {
-      dispatch({type: SUBTITLES_RECEIVED, filepath, subtitles})
+      if (subtitles.length) {
+        dispatch({type: SUBTITLES_RECEIVED, filepath, subtitles})
+      } else {
+        api.searchQuery(apiToken, lang, filename).then((subtitles) => {
+          dispatch({type: SUBTITLES_RECEIVED, filepath, subtitles})
+        })
+      }
     })
   }
 }

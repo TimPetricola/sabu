@@ -151,4 +151,8 @@ function searchFile (token, lang, filepath) {
     .then(([size, hash]) => search(token, lang, { moviehash: hash, moviebytesize: size }))
 }
 
-export default {login, logout, search, searchFile}
+function searchQuery (token, lang, query) {
+  return search(token, lang, { query: query })
+}
+
+export default {login, logout, search, searchFile, searchQuery}
