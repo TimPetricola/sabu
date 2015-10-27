@@ -23,7 +23,7 @@ class SabuApp extends React.Component {
     window.addEventListener('offline', this.checkConnection)
     this.checkConnection()
 
-    document.addEventListener('keyup', this.onKeyup)
+    document.getElementsByTagName('body')[0].addEventListener('keyup', this.onKeyup)
 
     this.props.apiLogin()
   }
@@ -31,7 +31,7 @@ class SabuApp extends React.Component {
   componentWillUmount() {
     this.props.apiLogout()
 
-    document.removeEventListener('keyup', this.onKeyup)
+    document.getElementsByTagName('body')[0].removeEventListener('keyup', this.onKeyup)
 
     window.removeEventListener('online', this.checkConnection)
     window.removeEventListener('offline', this.checkConnection)
@@ -39,6 +39,8 @@ class SabuApp extends React.Component {
 
   @autobind
   onKeyup(e) {
+    if (e.target !== e.currentTarget) { return }
+
     const charCode = (typeof e.which === 'number') ? e.which : e.keyCode
     const char = String.fromCharCode(e.which).toLowerCase()
 
