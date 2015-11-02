@@ -81,9 +81,7 @@ template.push({
 })
 
 app.on('window-all-closed', function () {
-  if (!darwin) {
-    app.quit()
-  }
+  app.quit()
 })
 
 app.on('ready', function () {
