@@ -1,102 +1,13 @@
+const xml = window.remote.require('xml-mapping')
+const fs = window.remote.require('fs')
+
 import getHash from './hash'
 
-const remote = window.remote
+import * as templates from './api-payloads'
 
-const xml = remote.require('xml-mapping')
-const fs = remote.require('fs')
-
-const API_URL = 'http://api.opensubtitles.org/xml-rpc'
-
-function loginBodyRequest () {
-  return `<?xml version="1.0"?>
-    <methodCall>
-      <methodName>LogIn</methodName>
-      <params>
-        <param>
-          <value>
-            <string></string>
-          </value>
-        </param>
-        <param>
-          <value>
-            <string></string>
-          </value>
-        </param>
-        <param>
-          <value>
-            <string>en</string>
-          </value>
-        </param>
-        <param>
-          <value>
-            <string>OpenSubtitlesPlayer v4.7</string>
-          </value>
-        </param>
-      </params>
-    </methodCall>`
-}
-
-function logoutBodyRequest (token) {
-  return `<?xml version="1.0"?>
-    <methodCall>
-      <methodName>LogOut</methodName>
-      <params>
-        <param>
-          <value>
-            <string>${token}</string>
-          </value>
-        </param>
-      </params>
-    </methodCall>`
-}
-
-function searchBodyRequest (token, lang, params = {}) {
-  let paramsXml = ''
-
-  for (var key in params) {
-    if (params.hasOwnProperty(key)) {
-      paramsXml += `
-        <member>
-          <name>${key}</name>
-          <value>
-            <string>${params[key]}</string>
-          </value>
-        </member>
-      `
-    }
-  }
-
-  return `<?xml version="1.0"?>
-    <methodCall>
-      <methodName>SearchSubtitles</methodName>
-      <params>
-        <param>
-          <value>
-            <string>${token}</string>
-          </value>
-        </param>
-        <param>
-          <value>
-            <array>
-              <data>
-                <value>
-                  <struct>
-                    <member>
-                      <name>sublanguageid</name>
-                      <value>
-                        <string>${lang}</string>
-                      </value>
-                    </member>
-                    ${paramsXml}
-                  </struct>
-                </value>
-              </data>
-            </array>
-          </value>
-        </param>
-      </params>
-    </methodCall>`
-}
+const DEFAULT_HOST = 'api.opensubtitles.org'
+const DEFAULT_PROTOCOL = 'http'
+const DEFAULT_ENDPOINT = '/xml-rpc'
 
 function parseXmlResult (raw) {
   let result = {}
@@ -112,47 +23,96 @@ function parseXmlResult (raw) {
   return result
 }
 
-function apiRequest (body) {
-  return fetch(API_URL, {
-    method: 'post',
-    body: body
-  }).then(res => res.text())
-    .then(raw => xml.load(raw))
-    .then(json => json.methodResponse.params.param.value.struct.member)
+class Api {
+  constructor(opts) {
+    this.token = null
+
+    this.options = Object.assign({
+      host: DEFAULT_HOST,
+      protocol: DEFAULT_PROTOCOL,
+      endpoint: DEFAULT_ENDPOINT
+    }, opts)
+
+    this.deferredRequests = []
+  }
+
+  login() {
+    return this._request(templates.login)
+      .then(members => members.find(member => member.name.$t === 'token'))
+      .then(member => member.value.string.$t)
+      .then(token => (this.token = token))
+      .then(() => {
+        this.deferredRequests.forEach(({callback, args}) => callback(...args))
+      })
+      .then(() => this.token)
+  }
+
+  logout() {
+    return new Promise((resolve) => {
+      if (this.token) {
+        this._request(templates.logout).then(() => {
+          this.token = null
+          resolve()
+        })
+      } else {
+        resolve()
+      }
+    })
+    return this._request(templates.logout).then(() => {
+      const token = this.token
+      this.token = null
+      return token
+    })
+  }
+
+  search(lang, params) {
+    return this._loggedInRequest((resolve) => {
+      this._request(templates.search, {lang, params})
+        .then(members => members.find(member => member.name.$t === 'data'))
+        .then(member => member.value.array.data.value)
+        .then(resultsXml => resultsXml instanceof Array ? resultsXml : [resultsXml])
+        .then(resultsXml => resultsXml.map(parseXmlResult))
+        .then(subs => subs.filter(sub => sub != null))
+        .then(resolve)
+    })
+  }
+
+  searchFile(lang, path) {
+    const sizePromise = new Promise(function (resolve) {
+      fs.stat(path, (err, stats) => resolve(stats.size))
+    })
+
+    const hashPromise = getHash(path)
+
+    return Promise.all([sizePromise, hashPromise])
+      .then(([size, hash]) => this.search(lang, { moviehash: hash, moviebytesize: size }))
+  }
+
+  searchQuery(lang, query) {
+    return this.search(lang, { query: query })
+  }
+
+  _request(template, params = {}) {
+    const endpoint = this.options.protocol + '://' + this.options.host + this.options.endpoint
+    const body = template(Object.assign(params, {token: this.token}))
+
+    return fetch(endpoint, { method: 'post', body: body })
+      .then(res => res.text())
+      .then(raw => xml.load(raw))
+      .then(json => json.methodResponse.params.param.value.struct.member)
+  }
+
+  // Ensure token exists before running executor
+  _loggedInRequest(executor) {
+    if (this.token) {
+      return new Promise(executor)
+    } else {
+      return new Promise((resolve, reject) => {
+        this.deferredRequests.push({callback: executor, args: [resolve, reject]})
+        this.login()
+      })
+    }
+  }
 }
 
-function login () {
-  return apiRequest(loginBodyRequest())
-    .then(members => members.find(member => member.name.$t === 'token'))
-    .then(member => member.value.string.$t)
-}
-
-function logout (token) {
-  return apiRequest(logoutBodyRequest(token)).then(() => token)
-}
-
-function search (token, lang, params = {}) {
-  return apiRequest(searchBodyRequest(token, lang, params))
-    .then(members => members.find(member => member.name.$t === 'data'))
-    .then(member => member.value.array.data.value)
-    .then(resultsXml => resultsXml instanceof Array ? resultsXml : [resultsXml])
-    .then(resultsXml => resultsXml.map(parseXmlResult))
-    .then(subs => subs.filter(sub => sub != null))
-}
-
-function searchFile (token, lang, filepath) {
-  const sizePromise = new Promise(function (resolve) {
-    fs.stat(filepath, (err, stats) => resolve(stats.size))
-  })
-
-  const hashPromise = getHash(filepath)
-
-  return Promise.all([sizePromise, hashPromise])
-    .then(([size, hash]) => search(token, lang, { moviehash: hash, moviebytesize: size }))
-}
-
-function searchQuery (token, lang, query) {
-  return search(token, lang, { query: query })
-}
-
-export default {login, logout, search, searchFile, searchQuery}
+export default new Api()

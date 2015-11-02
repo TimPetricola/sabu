@@ -7,9 +7,6 @@ const fs = remote.require('fs')
 const zlib = remote.require('zlib')
 const path = remote.require('path')
 
-export const API_LOGIN_SUCCESS = 'API_LOGIN_SUCCESS'
-export const API_LOGOUT_SUCCESS = 'API_LOGOUT_SUCCESS'
-
 export const SUBTITLES_REQUEST = 'SUBTITLES_REQUEST'
 export const SUBTITLES_RECEIVED = 'SUBTITLES_RECEIVED'
 export const SUBTITLES_NOT_FOUND = 'SUBTITLES_RECEIVED'
@@ -24,24 +21,17 @@ export const RESET = 'RESET'
 export const SET_ONLINE = 'SET_ONLINE'
 export const SET_OFFLINE = 'SET_OFFLINE'
 
+// Not making anything out of this one, so no dispatch
 export function apiLogin () {
-  return function (dispatch) {
-    return api.login().then((token) => dispatch({
-      type: API_LOGIN_SUCCESS,
-      token
-    }))
+  return function () {
+    return api.login()
   }
 }
 
+// Not making anything out of this one, so no dispatch
 export function apiLogout () {
-  return function (dispatch, getState) {
-    const token = getState().apiToken
-
-    if (token) {
-      api.logout(token).then(() => dispatch({
-        type: API_LOGOUT_SUCCESS
-      }))
-    }
+  return function () {
+    return api.logout()
   }
 }
 
@@ -49,14 +39,14 @@ export function requestSubtitles (filepath) {
   return function (dispatch, getState) {
     dispatch({type: SUBTITLES_REQUEST, filepath})
 
-    const {lang, apiToken} = getState()
+    const {lang} = getState()
     const filename = path.basename(filepath)
 
-    api.searchFile(apiToken, lang, filepath).then((subtitles) => {
+    api.searchFile(lang, filepath).then((subtitles) => {
       if (subtitles.length) {
         dispatch({type: SUBTITLES_RECEIVED, filepath, subtitles})
       } else {
-        api.searchQuery(apiToken, lang, filename).then((subtitles) => {
+        api.searchQuery(lang, filename).then((subtitles) => {
           dispatch({type: SUBTITLES_RECEIVED, filepath, subtitles})
         })
       }

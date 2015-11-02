@@ -4,7 +4,6 @@ import {getDefaultLang} from '../utils'
 
 const initialState = {
   selectedFiles: [],
-  apiToken: null,
   lang: getDefaultLang(),
   requesting: false,
   online: true
@@ -69,16 +68,6 @@ export default function sabuReducer (state = initialState, action) {
           downloading: false,
           downloaded: true
         })
-      })
-
-    case ActionTypes.API_LOGIN_SUCCESS:
-      return Object.assign({}, state, {
-        apiToken: action.token
-      })
-
-    case ActionTypes.API_LOGOUT_SUCCESS:
-      return Object.assign({}, state, {
-        apiToken: null
       })
 
     case ActionTypes.LANG_CHANGED:
