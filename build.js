@@ -21,10 +21,14 @@ webpack(webpackConfig).run(function() {
     out: 'dist',
     overwrite: true,
     prune: true,
+    ignore: '/node_modules/\.bin/',
     asar: true,
     'app-version': packageJson.version,
     'app-bundle-id': 'com.timpetricola.sabu'
-  }, function() {
+  }, function(err) {
+    if (err) {
+      console.log(err)
+    }
     console.log('App packaged.')
 
     console.log('Cleaning assets...')
