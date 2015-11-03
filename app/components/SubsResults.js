@@ -7,7 +7,7 @@ import Icon from './Icon'
 class SubLine extends React.Component {
   @autobind
   handleDownload() {
-    this.props.onDownload(this.props.sub.IDSubtitleFile);
+    this.props.onDownload(this.props.sub.id);
   }
 
   render() {
@@ -16,8 +16,8 @@ class SubLine extends React.Component {
     return (
       <li className='result'>
         <div className='result__info'>
-          <h3 className='sub-title'>{sub.SubFileName}</h3>
-          <p className='sub-meta'>{sub.SubDownloadsCnt} downloads</p>
+          <h3 className='sub-title'>{sub.filename}</h3>
+          <p className='sub-meta'>{sub.downloadsCount} downloads</p>
         </div>
         <div className='result__actions'>
           {
@@ -42,7 +42,7 @@ export default ({subs, onDownload, notFound}) => (
   <div className='results'>
     <ul className='results'>
       {
-       subs.map(sub => <SubLine key={sub.IDSubtitleFile} sub={sub} onDownload={onDownload} />)
+       subs.map(sub => <SubLine key={sub.id} sub={sub} onDownload={onDownload} />)
       }
     </ul>
   </div>

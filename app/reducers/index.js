@@ -27,7 +27,7 @@ function editSub (state, filepath, subId, editFn) {
   return editvideoFile(state, filepath, (file) => {
     return Object.assign({}, file, {
       subtitles: file.subtitles.map((sub) => {
-        if (sub.IDSubtitleFile === subId) {
+        if (sub.id === subId) {
           return editFn(sub)
         } else {
           return sub

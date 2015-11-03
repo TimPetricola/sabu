@@ -1,5 +1,5 @@
 import api from '../api'
-import {setDefaultLang} from '../utils'
+import {setDefaultLang, sanitizeSubtitles} from '../utils'
 
 const remote = window.remote
 const http = remote.require('http')
@@ -47,9 +47,11 @@ export function requestSubtitles (filepaths) {
 
       api.searchFile(lang, filepath).then((subtitles) => {
         if (subtitles.length) {
+          subtitles = sanitizeSubtitles(subtitles, filepath)
           dispatch({type: SUBTITLES_RECEIVED, filepath, subtitles})
         } else {
           api.searchQuery(lang, filename).then((subtitles) => {
+            subtitles = sanitizeSubtitles(subtitles, filepath)
             dispatch({type: SUBTITLES_RECEIVED, filepath, subtitles})
           })
         }
@@ -67,7 +69,7 @@ export function downloadSubtitle (filepath, subId) {
     })
 
     const file = getState().videoFiles.find(f => f.path === filepath)
-    const sub = file.subtitles.find(s => s.IDSubtitleFile === subId)
+    const sub = file.subtitles.find(s => s.id === subId)
 
     const dir = path.dirname(filepath)
 
@@ -75,7 +77,7 @@ export function downloadSubtitle (filepath, subId) {
 
     const subFile = fs.createWriteStream(subPath)
 
-    const request = http.get(sub.SubDownloadLink, function (response) {
+    const request = http.get(sub.downloadLink, function (response) {
       const gunzip = zlib.createGunzip()
 
       response.pipe(gunzip).pipe(subFile)
