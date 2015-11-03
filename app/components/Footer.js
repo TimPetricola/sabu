@@ -2,12 +2,12 @@ import React from 'react'
 
 import languages from 'json!../languages.json'
 
-export default ({onLangChange, onReset, lang, selectedFiles}) => (
+export default ({onLangChange, onReset, lang, videoFiles}) => (
   <footer className='app-footer'>
     <select
       onChange={onLangChange}
       value={lang}
-      disabled={selectedFiles.length}
+      disabled={videoFiles.length}
     >
       { languages.map(lang =>
           <option
@@ -22,7 +22,7 @@ export default ({onLangChange, onReset, lang, selectedFiles}) => (
     <button
       className='reset-btn'
       onClick={onReset}
-      disabled={!selectedFiles.length}
+      disabled={!videoFiles.length}
     >
       New search
     </button>

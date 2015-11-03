@@ -101,7 +101,7 @@ export default class Dropzone extends React.Component {
   @autobind
   open() {
     const params = {
-      properties: ['openFile'],
+      properties: ['openFile', 'multiSelections'],
       filters: this.props.filters
     }
 

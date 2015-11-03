@@ -2,26 +2,11 @@ import React from 'react'
 
 import Icon from './Icon'
 import Dropzone from './Dropzone'
-import SpinnerScreen from './SpinnerScreen'
 import SubsResults from './SubsResults'
-
-import {autobind} from '../utils'
 
 const FILE_FILTERS = [
   { name: 'Movies', extensions: ['mkv', 'avi', 'mp4', 'm4v']}
 ]
-
-const SubsLoading = () => (
-  <SpinnerScreen>
-    [Sabu] Searching for your subtitles...
-  </SpinnerScreen>
-)
-
-const SubsNotFound = () => (
-  <div className='centered-screen'>
-    Subtitles not found
-  </div>
-)
 
 const DropArea = ({onDrop}) => (
   <Dropzone
@@ -36,29 +21,29 @@ const DropArea = ({onDrop}) => (
   </Dropzone>
 )
 
+const FileSearch = ({file, onDownload}) => (
+  <div>
+    <h2>{file.name}</h2>
+    { file.requesting
+      ? <div>Searching...</div>
+      : file.subtitles.length
+        ? <SubsResults subs={file.subtitles} onDownload={(subId) => onDownload(file.path, subId) } />
+        : <div>Not found</div>
+    }
+  </div>
+)
+
 export default class Content extends React.Component {
-  @autobind
-  handleDrop(paths) {
-    [paths[0]].forEach(this.props.requestSubtitles)
-  }
-
-  @autobind
-  handleDownload(subId) {
-    this.props.downloadSubtitle(this.props.selectedFiles[0].path, subId)
-  }
-
   render() {
-    const selectedFile = this.props.selectedFiles[0]
+    const {videoFiles, onDownload: handleDownload, requestSubtitles: handleDrop} = this.props
 
     return (
       <div className='main'>
-        { selectedFile
-          ? selectedFile.requesting
-            ? <SubsLoading />
-            : selectedFile.subtitles.length
-              ? <SubsResults subs={selectedFile.subtitles} onDownload={this.handleDownload} />
-              : <SubsNotFound />
-          : <DropArea onDrop={this.handleDrop} />
+        { videoFiles.length
+          ? <div className='inner'>
+              {videoFiles.map(file => <FileSearch file={file} onDownload={handleDownload} key={file.path} />)}
+            </div>
+          : <DropArea onDrop={handleDrop} />
         }
       </div>
     )

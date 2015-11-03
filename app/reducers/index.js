@@ -2,16 +2,18 @@ import * as ActionTypes from '../actions/index'
 
 import {getDefaultLang} from '../utils'
 
+const path = remote.require('path')
+
 const initialState = {
-  selectedFiles: [],
+  videoFiles: [],
   lang: getDefaultLang(),
   requesting: false,
   online: true
 }
 
-function editSelectedFile (state, filepath, editFn) {
+function editvideoFile (state, filepath, editFn) {
   return Object.assign({}, state, {
-    selectedFiles: state.selectedFiles.map((file) => {
+    videoFiles: state.videoFiles.map((file) => {
       if (file.path === filepath) {
         return editFn(file)
       } else {
@@ -22,7 +24,7 @@ function editSelectedFile (state, filepath, editFn) {
 }
 
 function editSub (state, filepath, subId, editFn) {
-  return editSelectedFile(state, filepath, (file) => {
+  return editvideoFile(state, filepath, (file) => {
     return Object.assign({}, file, {
       subtitles: file.subtitles.map((sub) => {
         if (sub.IDSubtitleFile === subId) {
@@ -38,16 +40,20 @@ function editSub (state, filepath, subId, editFn) {
 export default function sabuReducer (state = initialState, action) {
   switch (action.type) {
     case ActionTypes.SUBTITLES_REQUEST:
+      const {filepath} = action
+      const name = path.basename(filepath, path.extname(filepath))
+
       return Object.assign({}, state, {
-        selectedFiles: [...state.selectedFiles, {
-          path: action.filepath,
+        videoFiles: [...state.videoFiles, {
+          path: filepath,
+          name: name,
           subtitles: [],
           requesting: true
         }]
       })
 
     case ActionTypes.SUBTITLES_RECEIVED:
-      return editSelectedFile(state, action.filepath, (file) => {
+      return editvideoFile(state, action.filepath, (file) => {
         return Object.assign({}, file, {
           subtitles: action.subtitles,
           requesting: false
@@ -77,7 +83,7 @@ export default function sabuReducer (state = initialState, action) {
 
     case ActionTypes.RESET:
       return Object.assign({}, state, {
-        selectedFiles: [],
+        videoFiles: [],
         requesting: false
       })
 

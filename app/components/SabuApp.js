@@ -55,8 +55,8 @@ class SabuApp extends React.Component {
   }
 
   @autobind
-  handleDownload(subId) {
-    this.props.downloadSubtitle(this.props.selectedFiles[0].path, subId)
+  handleDownload(filepath, subId) {
+    this.props.downloadSubtitle(filepath, subId)
   }
 
   @autobind
@@ -70,13 +70,11 @@ class SabuApp extends React.Component {
   }
 
   render() {
-    const selectedFile = this.props.selectedFiles[0];
-
     return (
       <div className='sabuapp'>
         { this.props.online
           ? <Content
-              selectedFiles={this.props.selectedFiles}
+              videoFiles={this.props.videoFiles}
               onDownload={this.handleDownload}
               requestSubtitles={this.props.requestSubtitles}
               downloadSubtitle={this.props.downloadSubtitle}
@@ -87,7 +85,7 @@ class SabuApp extends React.Component {
 
         }
         <Footer
-          selectedFiles={this.props.selectedFiles}
+          videoFiles={this.props.videoFiles}
           lang={this.props.lang}
           onLangChange={this.handleLangChange}
           onReset={this.handleReset}

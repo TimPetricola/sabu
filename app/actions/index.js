@@ -35,21 +35,25 @@ export function apiLogout () {
   }
 }
 
-export function requestSubtitles (filepath) {
+export function requestSubtitles (filepaths) {
+  filepaths = [].concat(filepaths)
+
   return function (dispatch, getState) {
-    dispatch({type: SUBTITLES_REQUEST, filepath})
+    filepaths.forEach(function (filepath) {
+      dispatch({type: SUBTITLES_REQUEST, filepath})
 
-    const {lang} = getState()
-    const filename = path.basename(filepath)
+      const {lang} = getState()
+      const filename = path.basename(filepath)
 
-    api.searchFile(lang, filepath).then((subtitles) => {
-      if (subtitles.length) {
-        dispatch({type: SUBTITLES_RECEIVED, filepath, subtitles})
-      } else {
-        api.searchQuery(lang, filename).then((subtitles) => {
+      api.searchFile(lang, filepath).then((subtitles) => {
+        if (subtitles.length) {
           dispatch({type: SUBTITLES_RECEIVED, filepath, subtitles})
-        })
-      }
+        } else {
+          api.searchQuery(lang, filename).then((subtitles) => {
+            dispatch({type: SUBTITLES_RECEIVED, filepath, subtitles})
+          })
+        }
+      })
     })
   }
 }
@@ -62,15 +66,12 @@ export function downloadSubtitle (filepath, subId) {
       subId: subId
     })
 
-    const file = getState().selectedFiles.find(f => f.path === filepath)
+    const file = getState().videoFiles.find(f => f.path === filepath)
     const sub = file.subtitles.find(s => s.IDSubtitleFile === subId)
 
-    const moviePath = path.resolve(filepath)
-    const movieExt = path.extname(moviePath)
-    const movieDir = path.dirname(moviePath)
-    const movieName = path.basename(moviePath, movieExt)
+    const dir = path.dirname(filepath)
 
-    const subPath = `${movieDir}/${movieName}.${sub.ISO639}.srt`
+    const subPath = `${dir}/${file.name}.${sub.ISO639}.srt`
 
     const subFile = fs.createWriteStream(subPath)
 

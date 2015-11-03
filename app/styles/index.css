@@ -72,7 +72,12 @@ select:disabled {
 .main {
   padding-top: 24px;
   flex: 1;
+  overflow-y: auto;
   display: flex;
+}
+
+.inner {
+  flex: 1;
 }
 
 .app-footer {
