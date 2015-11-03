@@ -69,4 +69,5 @@ export function sanitizeSubtitles(subtitles, filepath) {
 
       return true
     })
+    .sort((a, b) => b.downloadsCount - a.downloadsCount)
 }
