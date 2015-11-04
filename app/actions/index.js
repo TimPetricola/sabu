@@ -73,7 +73,7 @@ export function downloadSubtitle (filepath, subId) {
 
     const dir = path.dirname(filepath)
 
-    const subPath = `${dir}/${file.name}.${sub.ISO639}.srt`
+    const subPath = `${dir}/${file.name}.${sub.langIso639}.srt`
 
     const subFile = fs.createWriteStream(subPath)
 

@@ -49,7 +49,8 @@ function sanitizeSubtitle (sub) {
     downloadsCount: sub.SubDownloadsCnt,
     downloadLink: sub.SubDownloadLink,
     season: sub.SeriesSeason && sub.SeriesSeason.length && parseInt(sub.SeriesSeason, 10),
-    episode: sub.SeriesEpisode && sub.SeriesEpisode.length && parseInt(sub.SeriesEpisode, 10)
+    episode: sub.SeriesEpisode && sub.SeriesEpisode.length && parseInt(sub.SeriesEpisode, 10),
+    langIso639: sub.ISO639
   }
 }
 
