@@ -48,7 +48,8 @@ export default function sabuReducer (state = initialState, action) {
           path: filepath,
           name: name,
           subtitles: [],
-          requesting: true
+          requesting: true,
+          requestFinishedAt: null
         }]
       })
 
@@ -56,7 +57,8 @@ export default function sabuReducer (state = initialState, action) {
       return editvideoFile(state, action.filepath, (file) => {
         return Object.assign({}, file, {
           subtitles: action.subtitles,
-          requesting: false
+          requesting: false,
+          requestFinishedAt: new Date()
         })
       })
 

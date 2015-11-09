@@ -14,12 +14,12 @@ class SubLine extends React.Component {
     const {sub} = this.props;
 
     return (
-      <li className='result'>
-        <div className='result__info'>
-          <h3 className='sub-title'>{sub.filename}</h3>
-          <p className='sub-meta'>{sub.downloadsCount} downloads</p>
+      <li className='subtitle'>
+        <div className='subtitle__info'>
+          <h3 className='subtitle__title'>{sub.filename}</h3>
+          <p className='subtitle__meta'>{sub.downloadsCount} downloads</p>
         </div>
-        <div className='result__actions'>
+        <div className='subtitle__actions'>
           {
             sub.downloaded
             ? <span>Done</span>
@@ -39,11 +39,9 @@ class SubLine extends React.Component {
 }
 
 export default ({subs, onDownload, notFound}) => (
-  <div className='results'>
-    <ul className='results'>
-      {
-       subs.map(sub => <SubLine key={sub.id} sub={sub} onDownload={onDownload} />)
-      }
-    </ul>
-  </div>
+  <ul className='subtitles'>
+    { subs.map(sub =>
+      <SubLine key={sub.id} sub={sub} onDownload={onDownload} />
+    )}
+  </ul>
 )

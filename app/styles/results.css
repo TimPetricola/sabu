@@ -1,0 +1,71 @@
+.results {
+  padding: 24px;
+  width: 100%;
+}
+
+.result {
+  margin-bottom: 24px;
+}
+
+.result__title {
+  margin-bottom: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.subtitles {
+  overflow-y: auto;
+}
+
+.subtitles {
+  width: 100%;
+  list-style-type: none;
+  padding: 0;
+  border-radius: 2px;
+  background-color: #fff;
+  color: #222;
+}
+
+.subtitle {
+  display: flex;
+  background-color: rgba(0, 0, 0, .01);
+}
+
+.subtitle:nth-child(odd) {
+  background-color: rgba(0, 0, 0, .02);
+}
+
+.subtitle__info {
+  flex: 1;
+  padding: 12px;
+}
+
+.subtitle__actions {
+  flex: 0 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.download-icon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.subtitle__title {
+  margin: 0 0 6px 0;
+  font-weight: normal;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.subtitle__meta {
+  margin: 0;
+  color: #aaa;
+}

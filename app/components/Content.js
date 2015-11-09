@@ -15,23 +15,45 @@ const DropArea = ({onDrop}) => (
     onDrop={onDrop}
     filters={FILE_FILTERS}
   >
-    <Icon icon='upload' />
+    <Icon icon='upload' className='upload-icon' />
     <p>Select video file</p>
     <p>Or drag and drop it</p>
   </Dropzone>
 )
 
-const FileSearch = ({file, onDownload}) => (
-  <div>
-    <h2>{file.name}</h2>
-    { file.requesting
-      ? <div>Searching...</div>
-      : file.subtitles.length
-        ? <SubsResults subs={file.subtitles} onDownload={(subId) => onDownload(file.path, subId) } />
-        : <div>Not found</div>
+const Result = ({file, onDownload}) => (
+  <div className='result'>
+    <h2 className='result__title' title={file.name}>{file.name}</h2>
+    { file.subtitles.length
+      ? <SubsResults subs={file.subtitles} onDownload={(subId) => onDownload(file.path, subId) } />
+      : <div clasName='result__not-found'>Not found</div>
     }
   </div>
 )
+
+class Results extends React.Component {
+  render() {
+    const {files, onDownload} = this.props
+
+    const done = []
+    const requesting = []
+
+    files.forEach(file => (file.requesting ? requesting : done).push(file))
+    done.sort((a, b) => a.requestFinishedAt - b.requestFinishedAt)
+
+    return (
+      <div className='results'>
+        { done.map(file =>
+          <Result file={file} onDownload={onDownload} key={file.path} />
+        )}
+        { requesting.length
+          ? <div className='loading'>Searching...</div>
+          : null
+        }
+      </div>
+    )
+  }
+}
 
 export default class Content extends React.Component {
   render() {
@@ -40,9 +62,7 @@ export default class Content extends React.Component {
     return (
       <div className='main'>
         { videoFiles.length
-          ? <div className='inner'>
-              {videoFiles.map(file => <FileSearch file={file} onDownload={handleDownload} key={file.path} />)}
-            </div>
+          ? <Results files={videoFiles} onDownload={handleDownload} />
           : <DropArea onDrop={handleDrop} />
         }
       </div>
