@@ -3,6 +3,10 @@ var BrowserWindow = require('browser-window')
 var Menu = require('menu')
 var MenuItem = require('menu-item')
 var packageJson = require('./package.json')
+var hash = require('./lib/hash')
+var ipc = require('ipc')
+var Promise = require('promise')
+var fs = require('fs')
 
 var win = null
 var devEnv = process.env.NODE_ENV === 'development'
@@ -86,6 +90,14 @@ app.on('window-all-closed', function () {
 
 app.on('ready', function () {
   Menu.setApplicationMenu(Menu.buildFromTemplate(template))
+
+  ipc.on('file-hash', function (event, paths) {
+    paths.forEach(function (path) {
+      hash.hashAndSize(path).then(function(data) {
+        event.sender.send('file-hash', path, data)
+      })
+    })
+  })
 
   win = new BrowserWindow({
     title: 'Sabu',

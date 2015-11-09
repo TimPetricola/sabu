@@ -1,7 +1,4 @@
 const xml = window.remote.require('xml-mapping')
-const fs = window.remote.require('fs')
-
-import getHash from './hash'
 
 import * as templates from './api-payloads'
 
@@ -77,15 +74,8 @@ class Api {
     })
   }
 
-  searchFile(lang, path) {
-    const sizePromise = new Promise(function (resolve) {
-      fs.stat(path, (err, stats) => resolve(stats.size))
-    })
-
-    const hashPromise = getHash(path)
-
-    return Promise.all([sizePromise, hashPromise])
-      .then(([size, hash]) => this.search(lang, { moviehash: hash, moviebytesize: size }))
+  searchHash(lang, hash, size) {
+    return this.search(lang, { moviehash: hash, moviebytesize: size })
   }
 
   searchQuery(lang, query) {

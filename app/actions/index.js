@@ -6,6 +6,7 @@ const http = remote.require('http')
 const fs = remote.require('fs')
 const zlib = remote.require('zlib')
 const path = remote.require('path')
+const ipc = window.require('ipc')
 
 export const SUBTITLES_REQUEST = 'SUBTITLES_REQUEST'
 export const SUBTITLES_RECEIVED = 'SUBTITLES_RECEIVED'
@@ -36,16 +37,16 @@ export function apiLogout () {
 }
 
 export function requestSubtitles (filepaths) {
-  filepaths = [].concat(filepaths)
-
   return function (dispatch, getState) {
-    filepaths.forEach(function (filepath) {
-      dispatch({type: SUBTITLES_REQUEST, filepath})
+    const paths = [].concat(filepaths)
+    const {lang} = getState()
 
-      const {lang} = getState()
+    paths.forEach(filepath => dispatch({type: SUBTITLES_REQUEST, filepath}))
+
+    var i = ipc.on('file-hash', (filepath, data) => {
       const filename = path.basename(filepath)
 
-      api.searchFile(lang, filepath).then((subtitles) => {
+      api.searchHash(lang, data.hash, data.size).then((subtitles) => {
         if (subtitles.length) {
           subtitles = sanitizeSubtitles(subtitles, filepath)
           dispatch({type: SUBTITLES_RECEIVED, filepath, subtitles})
@@ -57,6 +58,8 @@ export function requestSubtitles (filepaths) {
         }
       })
     })
+
+    ipc.send('file-hash', paths)
   }
 }
 
