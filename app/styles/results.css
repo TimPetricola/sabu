@@ -30,7 +30,6 @@
 
 .subtitle {
   display: flex;
-  background-color: rgba(0, 0, 0, .01);
 }
 
 .subtitle:nth-child(odd) {
@@ -49,10 +48,9 @@
   justify-content: center;
 }
 
-.download-icon {
+.subtitle__cta-icon {
   width: 24px;
   height: 24px;
-  cursor: pointer;
 }
 
 .subtitle__title {

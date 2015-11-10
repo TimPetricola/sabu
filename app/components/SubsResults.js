@@ -20,17 +20,13 @@ class SubLine extends React.Component {
           <p className='subtitle__meta'>{sub.downloadsCount} downloads</p>
         </div>
         <div className='subtitle__actions'>
-          {
-            sub.downloaded
-            ? <span>Done</span>
+          { sub.downloaded
+            ? <Icon icon='done' className='subtitle__cta-icon' />
             : sub.downloading
-              ? <span>...</span>
-              : <a onClick={this.handleDownload}>
-                  <Icon
-                    icon='download'
-                    className='download-icon'
-                  />
-                </a>
+              ? <Icon icon='spinner' className='subtitle__cta-icon' />
+              : <button onClick={this.handleDownload}>
+                  <Icon icon='download' className='subtitle__cta-icon' />
+                </button>
           }
         </div>
       </li>

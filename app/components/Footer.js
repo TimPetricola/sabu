@@ -20,7 +20,7 @@ export default ({onLangChange, onReset, lang, videoFiles}) => (
       }
     </select>
     <button
-      className='reset-btn'
+      className='btn reset-btn'
       onClick={onReset}
       disabled={!videoFiles.length}
     >
