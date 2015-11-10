@@ -2,7 +2,7 @@
   "name": "sabu",
   "productName": "Sabu",
   "homepage": "http://github.com/TimPetricola/sabu",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "main": "index.js",
   "repository": "TimPetricola/sabu",
   "scripts": {
