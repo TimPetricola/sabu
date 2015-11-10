@@ -36,29 +36,32 @@ export function apiLogout () {
   }
 }
 
+export function searchSubtitles (filepath, {hash, size}) {
+  return function (dispatch, getState) {
+    const filename = path.basename(filepath)
+    const {lang} = getState()
+
+    api.searchHash(lang, hash, size).then((subtitles) => {
+      subtitles = sanitizeSubtitles(subtitles, filepath)
+      if (subtitles.length) {
+        dispatch({type: SUBTITLES_RECEIVED, filepath, subtitles})
+      } else {
+        api.searchQuery(lang, filename).then((subtitles) => {
+          subtitles = sanitizeSubtitles(subtitles, filepath)
+          dispatch({type: SUBTITLES_RECEIVED, filepath, subtitles})
+        })
+      }
+    })
+  }
+}
+
 export function requestSubtitles (filepaths) {
   return function (dispatch, getState) {
     const paths = [].concat(filepaths)
-    const {lang} = getState()
 
     paths.forEach(filepath => dispatch({type: SUBTITLES_REQUEST, filepath}))
 
-    var i = ipc.on('file-hash', (filepath, data) => {
-      const filename = path.basename(filepath)
-
-      api.searchHash(lang, data.hash, data.size).then((subtitles) => {
-        if (subtitles.length) {
-          subtitles = sanitizeSubtitles(subtitles, filepath)
-          dispatch({type: SUBTITLES_RECEIVED, filepath, subtitles})
-        } else {
-          api.searchQuery(lang, filename).then((subtitles) => {
-            subtitles = sanitizeSubtitles(subtitles, filepath)
-            dispatch({type: SUBTITLES_RECEIVED, filepath, subtitles})
-          })
-        }
-      })
-    })
-
+    // Let main process do the hashing
     ipc.send('file-hash', paths)
   }
 }
