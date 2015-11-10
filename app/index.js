@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 
 import SabuApp from './components/SabuApp'
-import {searchSubtitles} from './actions'
+import {searchSubtitles, requestSubtitles} from './actions'
 
 import './styles/index.css'
 
@@ -24,10 +24,13 @@ document.addEventListener('dragover', function(e) {
   e.stopPropagation();
 });
 
-
 // Listen to events from the main process
 ipc.on('file-hash', (filepath, data) => {
   store.dispatch(searchSubtitles(filepath, data))
+})
+
+ipc.on('open-paths', (paths) => {
+  store.dispatch(requestSubtitles(paths))
 })
 
 ReactDOM.render(

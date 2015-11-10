@@ -88,7 +88,17 @@ app.on('window-all-closed', function () {
   app.quit()
 })
 
+const pathsToOpen = []
+const addPathToOpen = function (event, path) {
+  e.preventDefault()
+  pathsToOpen.push(path)
+}
+
+app.on('open-file', addPathToOpen)
+
 app.on('ready', function () {
+  app.removeListener('open-file', addPathToOpen)
+
   Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 
   ipc.on('file-hash', function (event, paths) {
@@ -110,6 +120,12 @@ app.on('ready', function () {
   })
 
   win.loadUrl('file://' + __dirname + '/app/index.html')
+
+  win.webContents.on('did-finish-load', function() {
+    if (pathsToOpen.length) {
+      win.webContents.send('open-paths', pathsToOpen)
+    }
+  });
 
   win.on('closed', function () {
     win = null
