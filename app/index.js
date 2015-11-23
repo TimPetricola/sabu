@@ -4,13 +4,13 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 
 import SabuApp from './components/SabuApp'
-import {searchSubtitles, requestSubtitles} from './actions'
+import {requestSubtitles} from './actions'
 
 import './styles/index.css'
 
 import configureStore from './store/configureStore'
 
-const ipc = window.require('ipc')
+import ipc from '../lib/ipc/client'
 const store = configureStore()
 
 // Prevent browser from loading file on drop
@@ -23,11 +23,6 @@ document.addEventListener('dragover', function(e) {
   e.preventDefault();
   e.stopPropagation();
 });
-
-// Listen to events from the main process
-ipc.on('file-hash', (filepath, data) => {
-  store.dispatch(searchSubtitles(filepath, data))
-})
 
 ipc.on('open-paths', (paths) => {
   store.dispatch(requestSubtitles(paths))

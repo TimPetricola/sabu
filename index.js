@@ -4,7 +4,7 @@ var Menu = require('menu')
 var MenuItem = require('menu-item')
 var packageJson = require('./package.json')
 var hash = require('./lib/hash')
-var ipc = require('ipc')
+var ipc = require('./lib/ipc/host')
 var Promise = require('promise')
 var fs = require('fs')
 
@@ -101,12 +101,8 @@ app.on('ready', function () {
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 
-  ipc.on('file-hash', function (event, paths) {
-    paths.forEach(function (path) {
-      hash.hashAndSize(path).then(function(data) {
-        event.sender.send('file-hash', path, data)
-      })
-    })
+  ipc.on('file-hash', function (resolve, reject, path) {
+    hash.hashAndSize(path).then(resolve).catch(reject)
   })
 
   win = new BrowserWindow({

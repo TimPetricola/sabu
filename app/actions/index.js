@@ -1,12 +1,12 @@
 import api from '../api'
 import {setDefaultLang, sanitizeSubtitles} from '../utils'
+import ipc from '../../lib/ipc/client'
 
 const remote = window.remote
 const http = remote.require('http')
 const fs = remote.require('fs')
 const zlib = remote.require('zlib')
 const path = remote.require('path')
-const ipc = window.require('ipc')
 
 export const SUBTITLES_REQUEST = 'SUBTITLES_REQUEST'
 export const SUBTITLES_RECEIVED = 'SUBTITLES_RECEIVED'
@@ -36,7 +36,19 @@ export function apiLogout () {
   }
 }
 
-export function searchSubtitles (filepath, {hash, size}) {
+function searchSubtitlesByName (filepath) {
+  return function (dispatch, getState) {
+    const filename = path.basename(filepath)
+    const {lang} = getState()
+
+    api.searchQuery(lang, filename).then((subtitles) => {
+      subtitles = sanitizeSubtitles(subtitles, filepath)
+      dispatch({type: SUBTITLES_RECEIVED, filepath, subtitles})
+    })
+  }
+}
+
+function searchSubtitles (filepath, {hash, size}) {
   return function (dispatch, getState) {
     const filename = path.basename(filepath)
     const {lang} = getState()
@@ -46,10 +58,7 @@ export function searchSubtitles (filepath, {hash, size}) {
       if (subtitles.length) {
         dispatch({type: SUBTITLES_RECEIVED, filepath, subtitles})
       } else {
-        api.searchQuery(lang, filename).then((subtitles) => {
-          subtitles = sanitizeSubtitles(subtitles, filepath)
-          dispatch({type: SUBTITLES_RECEIVED, filepath, subtitles})
-        })
+        searchSubtitlesByName(filepath)(dispatch, getState)
       }
     })
   }
@@ -61,8 +70,15 @@ export function requestSubtitles (filepaths) {
 
     paths.forEach(filepath => dispatch({type: SUBTITLES_REQUEST, filepath}))
 
-    // Let main process do the hashing
-    ipc.send('file-hash', paths)
+    paths.forEach(path => {
+      // Let main process do the hashing
+      ipc.send('file-hash', path).then(data => {
+        searchSubtitles(path, data)(dispatch, getState)
+      }).catch(() => {
+        // Couldn't compute hash, search by name
+        searchSubtitlesByName(filepath)(dispatch, getState)
+      })
+    })
   }
 }
 
