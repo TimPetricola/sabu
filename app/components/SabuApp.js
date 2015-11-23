@@ -69,6 +69,12 @@ class SabuApp extends React.Component {
     this.props.reset()
   }
 
+  @autobind
+  handleRequestSubtitles(paths) {
+    this.props.reset()
+    this.props.requestSubtitles(paths)
+  }
+
   render() {
     return (
       <div className='sabuapp'>
@@ -76,7 +82,7 @@ class SabuApp extends React.Component {
           ? <Content
               videoFiles={this.props.videoFiles}
               onDownload={this.handleDownload}
-              requestSubtitles={this.props.requestSubtitles}
+              requestSubtitles={this.handleRequestSubtitles}
               downloadSubtitle={this.props.downloadSubtitle}
             />
           : <div className='centered-screen'>

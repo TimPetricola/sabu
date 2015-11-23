@@ -33,7 +33,7 @@ const Result = ({file, onDownload}) => (
 
 class Results extends React.Component {
   render() {
-    const {files, onDownload} = this.props
+    const {files, onDownload, onDrop} = this.props
 
     const done = []
     const requesting = []
@@ -42,7 +42,11 @@ class Results extends React.Component {
     done.sort((a, b) => a.requestFinishedAt - b.requestFinishedAt)
 
     return (
-      <div className='results'>
+      <Dropzone
+        className='results'
+        filters={FILE_FILTERS}
+        onDrop={onDrop}
+      >
         { done.map(file =>
           <Result file={file} onDownload={onDownload} key={file.path} />
         )}
@@ -50,7 +54,7 @@ class Results extends React.Component {
           ? <div className='loading'>Searching...</div>
           : null
         }
-      </div>
+      </Dropzone>
     )
   }
 }
@@ -62,7 +66,7 @@ export default class Content extends React.Component {
     return (
       <div className='main'>
         { videoFiles.length
-          ? <Results files={videoFiles} onDownload={handleDownload} />
+          ? <Results files={videoFiles} onDownload={handleDownload} onDrop={handleDrop} />
           : <DropArea onDrop={handleDrop} />
         }
       </div>
