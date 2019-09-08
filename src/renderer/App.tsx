@@ -102,16 +102,19 @@ export default () => {
   };
 
   return (
-    <div className="sabuapp">
-      {isOnline ? (
-        <Content
-          videoFiles={videoFiles}
-          onDownload={handleDownload}
-          requestSubtitles={handleRequestSubtitles}
-        />
-      ) : (
-        <div className="centered-screen">No internet connection</div>
-      )}
+    <div className="flex flex-col h-screen">
+      <div className="draggable-bar flex-shrink-0" />
+      <div className="flex-grow">
+        {isOnline ? (
+          <Content
+            videoFiles={videoFiles}
+            onDownload={handleDownload}
+            requestSubtitles={handleRequestSubtitles}
+          />
+        ) : (
+          <div className="centered-screen">No internet connection</div>
+        )}
+      </div>
       <Footer
         videoFiles={videoFiles}
         lang={lang}

@@ -18,14 +18,23 @@ export type File = {
 
 const DropArea = ({ onDrop }: { onDrop: (paths: string[]) => void }) => (
   <Dropzone
-    className="dropzone"
-    activeClassName="dropzone--active"
+    className="border-2 border-gray-300 rounded m-3 p-6 text-center flex flex-col justify-center items-center flex-grow"
+    activeClassName="bg-blue-100 border-blue-300"
     onDrop={onDrop}
     filters={FILE_FILTERS}
   >
-    <Icon icon="upload" className="upload-icon" />
-    <p>Select video file</p>
-    <p>Or drag and drop it</p>
+    <div className="h-32 w-32 mb-5">
+      <Icon icon="upload" />
+    </div>
+    <p className="font-bold text-gray-700 text-lg mb-2">
+      Drag & drop video files
+    </p>
+    <p className="text-gray-500">
+      or{" "}
+      <span className="cursor-pointer border-b-2 border-gray-300 hover:text-gray-600 hover:border-gray-400">
+        browse
+      </span>
+    </p>
   </Dropzone>
 );
 
@@ -36,8 +45,8 @@ const Result = ({
   file: File;
   onDownload: (path: string, subId: string) => void;
 }) => (
-  <div className="result">
-    <h2 className="result__title" title={file.name}>
+  <div className="mb-4 mx-4">
+    <h2 className="text-gray-700 mb-1 truncate" title={file.name}>
       {file.name}
     </h2>
     {file.subtitles.length ? (
@@ -46,7 +55,12 @@ const Result = ({
         onDownload={subId => onDownload(file.path, subId)}
       />
     ) : (
-      <div className="result__not-found">Not found</div>
+      <div className="mb-x py-1 px-3 rounded border-2 border-red-300 bg-red-100 flex items-center">
+        <div className="h-10 w-10 mr-2">
+          <Icon icon="robot" />
+        </div>
+        Ooops, not found.
+      </div>
     )}
   </div>
 );
@@ -69,7 +83,15 @@ const Results = ({
       {done.map(file => (
         <Result file={file} onDownload={onDownload} key={file.path} />
       ))}
-      {requesting.length ? <div className="loading">Searching...</div> : null}
+      {requesting.length ? (
+        <div className="m-3 p-6 text-center flex flex-col justify-center items-center flex-grow">
+          <div className="h-32 w-32 mb-5">
+            <Icon icon="hourglass" />
+          </div>
+
+          <p className="font-bold text-gray-700 text-lg mb-2">Searching...</p>
+        </div>
+      ) : null}
     </>
   );
 };
@@ -81,13 +103,11 @@ type Props = {
 };
 
 export default ({ videoFiles, requestSubtitles, onDownload }: Props) => {
-  return (
-    <div className="main">
-      {videoFiles.length ? (
-        <Results files={videoFiles} onDownload={onDownload} />
-      ) : (
-        <DropArea onDrop={requestSubtitles} />
-      )}
+  return videoFiles.length ? (
+    <Results files={videoFiles} onDownload={onDownload} />
+  ) : (
+    <div className="flex flex-col h-full">
+      <DropArea onDrop={requestSubtitles} />
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import React from "react";
+import classNames from "classnames";
 import Icon from "./Icon";
 
 export type Sub = {
@@ -15,29 +16,39 @@ export type Sub = {
 
 const SubLine = ({
   sub,
-  onDownload
+  onDownload,
+  index
 }: {
   sub: Sub;
   onDownload: (subId: string) => void;
+  index: number;
 }) => {
   const handleDownload = () => {
     onDownload(sub.id);
   };
 
   return (
-    <li className="subtitle">
-      <div className="subtitle__info">
-        <h3 className="subtitle__title">{sub.filename}</h3>
-        <p className="subtitle__meta">{sub.downloadsCount} downloads</p>
+    <li
+      className={classNames("px-3 py-1 flex justify-between items-center", {
+        "bg-gray-100": index % 2 === 0
+      })}
+    >
+      <div className="flex-grow min-w-0">
+        <h3 className="text-gray-700 truncate" title={sub.filename}>
+          {sub.filename}
+        </h3>
+        <p className="text-gray-500 text-sm truncate">
+          {sub.downloadsCount} downloads
+        </p>
       </div>
-      <div className="subtitle__actions">
+      <div className="flex-shrink-0 h-10 w-10 ml-2">
         {sub.downloaded ? (
-          <Icon icon="done" className="subtitle__cta-icon" />
+          <Icon icon="done" />
         ) : sub.downloading ? (
-          <Icon icon="spinner" className="subtitle__cta-icon" />
+          <Icon icon="hourglass" />
         ) : (
-          <button onClick={handleDownload}>
-            <Icon icon="download" className="subtitle__cta-icon" />
+          <button onClick={handleDownload} className="h-10 w-10">
+            <Icon icon="download" />
           </button>
         )}
       </div>
@@ -51,9 +62,9 @@ type Props = {
 };
 
 export default ({ subs, onDownload }: Props) => (
-  <ul className="subtitles">
-    {subs.map(sub => (
-      <SubLine key={sub.id} sub={sub} onDownload={onDownload} />
+  <ul className="mb-x rounded border-2 border-gray-300">
+    {subs.map((sub, index) => (
+      <SubLine key={sub.id} sub={sub} onDownload={onDownload} index={index} />
     ))}
   </ul>
 );
