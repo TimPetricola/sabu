@@ -24,7 +24,7 @@
     "promise": "^7.0.4",
     "rimraf": "^2.4.3",
     "style-loader": "^0.13.0",
-    "tough-cookie": "^2.2.0",
+    "tough-cookie": "^3.0.1",
     "webpack": "^1.12.2",
     "webpack-dev-server": "^1.12.1"
   },
