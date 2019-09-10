@@ -85,7 +85,7 @@ const Results = ({
       ))}
       {requesting.length ? (
         <div className="m-3 p-6 text-center flex flex-col justify-center items-center flex-grow">
-          <div className="h-32 w-32 mb-5">
+          <div className="h-32 w-32 mb-5 spin">
             <Icon icon="hourglass" />
           </div>
 

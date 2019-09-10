@@ -19,8 +19,10 @@ const client = (() => {
     });
   };
 
-  const on = (channel: string, callback: Function) =>
-    ipcRenderer.on(channel, callback);
+  const on = (
+    channel: string,
+    callback: (event: Electron.IpcRendererEvent, ...args: any[]) => void
+  ) => ipcRenderer.on(channel, callback);
 
   ipcRenderer.on(
     "ipc-promised-resolve",
