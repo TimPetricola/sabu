@@ -1,2 +1,5 @@
+.DS_Store
 dist/
-app/dist/
+node_modules/
+thumbs.db
+.idea/

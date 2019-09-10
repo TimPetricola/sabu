@@ -1,0 +1,10 @@
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+.draggable-bar {
+  height: 30px;
+  -webkit-app-region: drag;
+}

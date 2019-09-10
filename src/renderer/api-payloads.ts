@@ -1,4 +1,4 @@
-export function login () {
+export function login() {
   return `<?xml version="1.0"?>
     <methodCall>
       <methodName>LogIn</methodName>
@@ -24,10 +24,10 @@ export function login () {
           </value>
         </param>
       </params>
-    </methodCall>`
+    </methodCall>`;
 }
 
-export function logout ({token}) {
+export function logout({ token }: { token: string }) {
   return `<?xml version="1.0"?>
     <methodCall>
       <methodName>LogOut</methodName>
@@ -38,11 +38,19 @@ export function logout ({token}) {
           </value>
         </param>
       </params>
-    </methodCall>`
+    </methodCall>`;
 }
 
-export function search ({token, lang, params = {}}) {
-  let paramsXml = ''
+export function search({
+  token,
+  lang,
+  params = {}
+}: {
+  token: string;
+  lang: string;
+  params?: { [k: string]: string };
+}) {
+  let paramsXml = "";
 
   for (var key in params) {
     if (params.hasOwnProperty(key)) {
@@ -53,7 +61,7 @@ export function search ({token, lang, params = {}}) {
             <string>${params[key]}</string>
           </value>
         </member>
-      `
+      `;
     }
   }
 
@@ -86,5 +94,5 @@ export function search ({token, lang, params = {}}) {
           </value>
         </param>
       </params>
-    </methodCall>`
+    </methodCall>`;
 }
