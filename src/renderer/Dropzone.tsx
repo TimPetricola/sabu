@@ -86,7 +86,7 @@ export default ({
     if (isOpen) return;
     setOpen(true);
 
-    remote.dialog.showOpenDialog(params, paths => {
+    remote.dialog.showOpenDialog(params, (paths: string[]) => {
       setOpen(false);
 
       if (paths && paths.length) onDrop(paths);

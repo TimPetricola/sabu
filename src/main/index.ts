@@ -31,7 +31,7 @@ if (isDarwin) {
       {
         label: "Hide Others",
         accelerator: "Command+Shift+H",
-        role: "hideothers"
+        role: "hideOthers"
       },
       { label: "Show All", role: "unhide" },
       { type: "separator" },
