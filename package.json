@@ -33,6 +33,6 @@
     "electron-webpack-ts": "^3.2.0",
     "postcss-loader": "^3.0.0",
     "typescript": "^3.6.3",
-    "webpack": "~4.40.0"
+    "webpack": "~4.40.2"
   }
 }
