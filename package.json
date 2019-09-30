@@ -21,7 +21,7 @@
     "@types/react-dom": "^16.9.1",
     "classnames": "^2.2.6",
     "react": "^16.9.0",
-    "react-dom": "^16.9.0",
+    "react-dom": "^16.10.1",
     "source-map-support": "^0.5.13",
     "tailwindcss": "^1.1.2",
     "xml-mapping": "^1.7.1"
