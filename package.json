@@ -27,7 +27,7 @@
     "xml-mapping": "^1.7.1"
   },
   "devDependencies": {
-    "electron": "6.0.12",
+    "electron": "17.0.0",
     "electron-builder": "^22.1.0",
     "electron-webpack": "^2.7.4",
     "electron-webpack-ts": "^3.2.0",
