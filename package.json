@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "electron": "6.0.12",
-    "electron-builder": "^22.1.0",
+    "electron-builder": "^22.14.13",
     "electron-webpack": "^2.7.4",
     "electron-webpack-ts": "^3.2.0",
     "postcss-loader": "^3.0.0",
